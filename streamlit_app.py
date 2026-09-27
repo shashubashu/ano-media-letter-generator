@@ -79,11 +79,17 @@ st.subheader("Letter details")
 
 values = {}
 col1, col2 = st.columns(2)
-text_fields = [f for f in required_fields if f != "serial"]
+text_fields = [f for f in required_fields if f not in ("serial", "work_mode")]
 for i, f in enumerate(text_fields):
     target_col = col1 if i % 2 == 0 else col2
     values[f] = target_col.text_input(label_for(f), value=default_for(f), help=help_for(f),
                                        key=f"in_{letter_type}_{f}")
+
+if "work_mode" in required_fields:
+    WORK_MODE_LABELS = {"Office (Lam Road, Nashik)": "office", "Remote (Work From Home)": "remote"}
+    choice = st.radio("Employee's work location", list(WORK_MODE_LABELS.keys()),
+                       horizontal=True, key=f"in_{letter_type}_work_mode")
+    values["work_mode"] = WORK_MODE_LABELS[choice]
 
 if "serial" in required_fields:
     values["serial"] = col1.text_input(label_for("serial"), value=serials.next(letter_type),

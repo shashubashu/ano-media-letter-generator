@@ -268,8 +268,12 @@ EMPLOYMENT = LetterTemplate(
                       Run("{position}", True),
                       Run(" with effect from ", False),
                       Run("{start_date}", True),
-                      Run(", at the Company's office at Lam Road, Nashik,/at a remote location (work "
-                          "from home) or such other location as reasonably required by the Company.", False),
+                      # {work_location} resolves to one of the two original
+                      # slash-separated options based on work_mode="office"
+                      # or "remote" (see engine.work_location_kwargs) —
+                      # instead of printing both options with a slash.
+                      Run(", {work_location} or such other location as reasonably required by "
+                          "the Company.", False),
                   ]),
         # The "₹" glyph uses a different embedded font (NotoSans) than the
         # rest of the document because base Times has no rupee-sign glyph,
@@ -294,7 +298,7 @@ EMPLOYMENT = LetterTemplate(
     ],
 )
 EMPLOYMENT_FIELDS = ["serial", "date", "name", "address", "position", "start_date",
-                     "salary_figure", "salary_words"]
+                     "work_mode", "salary_figure", "salary_words"]
 
 ALL_TEMPLATES = {
     "relieving": (RELIEVING, RELIEVING_FIELDS),

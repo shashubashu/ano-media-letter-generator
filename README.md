@@ -126,3 +126,14 @@ draft of the wording.
   of always saying "her". Same for the Recommendation Letter's "...both
   **her** peers...". Flag it if you'd rather I leave those exactly as
   originally written.
+
+## Changelog
+
+- **Employment Agreement — work location toggle.** Section 1 used to print
+  both options from the original template verbatim ("...at the Company's
+  office at Lam Road, Nashik,/at a remote location (work from home)...").
+  It now takes a single `work_mode` field (`"office"` or `"remote"`) and
+  prints only the one that applies — a proper toggle in the web app, or
+  pass `work_mode="office"` / `work_mode="remote"` when calling
+  `generate_one(...)` directly. See `engine.WORK_LOCATION_TEXT` if the
+  wording of either option ever needs to change.

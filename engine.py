@@ -139,6 +139,29 @@ def pronoun_kwargs(gender: str) -> dict:
 
 
 # --------------------------------------------------------------------------
+# Work-location helper (Employment Agreement only)
+# --------------------------------------------------------------------------
+
+# The original template wrote both options in one slash-separated sentence
+# ("...at the Company's office at Lam Road, Nashik,/at a remote location
+# (work from home)..."). This resolves a single choice instead, exactly as
+# for gender/pronouns: pass work_mode="office" or "remote" in `data` and
+# {work_location} in a Run template resolves to the right phrase. Letter
+# types that don't use "work_mode" are unaffected — see generate_letter().
+WORK_LOCATION_TEXT = {
+    "office": "at the Company's office at Lam Road, Nashik",
+    "remote": "at a remote location (work from home)",
+}
+
+
+def work_location_kwargs(work_mode: str) -> dict:
+    mode = work_mode.lower()
+    if mode not in WORK_LOCATION_TEXT:
+        raise ValueError("work_mode must be 'office' or 'remote'")
+    return {"work_location": WORK_LOCATION_TEXT[mode]}
+
+
+# --------------------------------------------------------------------------
 # Low level drawing helpers
 # --------------------------------------------------------------------------
 
@@ -219,8 +242,12 @@ def generate_letter(template: LetterTemplate, data: dict, gender: str,
                      recipient_name: str, templates_dir: Path, output_dir: Path) -> Path:
     """Fills `template` with `data` (+ pronouns resolved for `gender`) and
     writes  "<LetterCode> letter - <recipient_name>.pdf"  into output_dir.
+    If `data` includes "work_mode" ("office" or "remote"), {work_location}
+    is resolved too (used by the Employment Agreement's Section 1 clause).
     """
     merged = {**data, **pronoun_kwargs(gender)}
+    if "work_mode" in data:
+        merged.update(work_location_kwargs(data["work_mode"]))
 
     doc = fitz.open(str(templates_dir / template.source_pdf))
     try:
