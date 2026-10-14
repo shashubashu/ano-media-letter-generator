@@ -51,8 +51,10 @@ FIELD_META = {
     "location":           ("Work location", "", "Nashik"),
     "compensation":       ("Compensation (as shown on the letter)", 'e.g. "Rs. 35,000"', ""),
     "salary_figure":      ("Monthly salary — figures", 'e.g. "45,000" (goes after the ₹ symbol)', ""),
-    "salary_words":       ("Monthly salary — in words (thousands)", 'e.g. "45" for "Forty-Five Thousand"', ""),
-    "date":               ("Letter date", "", _today_long),
+    "salary_words":       ("Monthly salary — in words", 'e.g. "Forty-Five Thousand"', ""),
+    "effective_date":     ("Effective date (employment starts)", "", _today_long),
+    "probation_months":   ("Probation period (months)", 'e.g. "3" or "six" — appears as "3-month probation"', ""),
+    "date":               ("Letter date / date agreement is made", "", _today_long),
     "mmyy":               ("Ref. No. month/year code", 'e.g. "0926" for Sept 2026', _mmyy),
     "serial":             ("Ref. No. serial", "Auto-suggested from the last one used; edit if needed.", ""),
 }

@@ -129,11 +129,11 @@ draft of the wording.
 
 ## Changelog
 
-- **Employment Agreement — work location toggle.** Section 1 used to print
-  both options from the original template verbatim ("...at the Company's
-  office at Lam Road, Nashik,/at a remote location (work from home)...").
-  It now takes a single `work_mode` field (`"office"` or `"remote"`) and
-  prints only the one that applies — a proper toggle in the web app, or
-  pass `work_mode="office"` / `work_mode="remote"` when calling
-  `generate_one(...)` directly. See `engine.WORK_LOCATION_TEXT` if the
-  wording of either option ever needs to change.
+- **Employment Agreement — revised template.** The Employment Agreement now
+  uses `Employment_Agreement_final_template_pdf.pdf`. The form asks for:
+  Ref. No. serial, agreement date, employee name and home address,
+  position, effective date, monthly salary (figures and in words) and the
+  probation period in months. The office location is now fixed text in the
+  template, so the earlier Office/Remote toggle is no longer shown (the
+  `work_mode` helper in `engine.py` is left in place but unused). The
+  employee's printed name on the last page is filled in automatically.

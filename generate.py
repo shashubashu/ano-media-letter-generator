@@ -71,9 +71,9 @@ if __name__ == "__main__":
     generate_one(
         "employment", "female", "Sneha Kulkarni",
         name="Sneha Kulkarni", address="221, Model Colony, Nashik - 422002",
-        position="Senior Content Writer", start_date="1 October 2026",
-        work_mode="office",  # or "remote" for work-from-home
-        salary_figure="45,000", salary_words="45",
+        position="Senior Content Writer", effective_date="1 October 2026",
+        salary_figure="45,000", salary_words="Forty-Five Thousand",
+        probation_months="3",
         serial="018", date="15 September 2026",
     )
 

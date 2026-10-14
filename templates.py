@@ -237,17 +237,23 @@ OFFER_FIELDS = ["serial", "date", "joining_date", "name", "address", "position",
 
 # ---------------------------------------------------------------------------
 # 5. EMPLOYMENT AGREEMENT  (7 pages; placeholders on pages 1, 2 and 7)
+#    Built on the revised template (Employment_Agreement_final_template_pdf.pdf):
+#    office location is now fixed text, compensation clause adds a probation
+#    period, and the date placeholder is "<date when agreement is made>".
 # ---------------------------------------------------------------------------
 EMPLOYMENT = LetterTemplate(
-    source_pdf="Employment_Agreement_final-_template_pdf__1_.pdf",
+    source_pdf="Employment_Agreement_final_template_pdf.pdf",
     letter_code="Employment Agreement",
     line_fields=[
         LineField(page=0, origin=(95.67, 172.85), template=": AnO/HR/{serial}",
-                  erase_rect=(95.67, 162.8, 400, 178.2)),
-        LineField(page=0, origin=(433.6, 172.85), template="{date}",
-                  erase_rect=(433.6, 162.8, 545, 178.2)),
-        LineField(page=6, origin=(59.55, 453.55), template="{name}", bold=True,
-                  erase_rect=(58.5, 438.6, 300, 459.6)),
+                  erase_rect=(95.67, 162.8, 385, 178.2)),
+        # In the revised template "Date: <...>" is one bold run.
+        LineField(page=0, origin=(390.79, 172.85), template="Date: {date}", bold=True,
+                  erase_rect=(390.0, 162.8, 592, 178.2)),
+        # Employee's printed name under the signature line (the template
+        # had a previous employee's name typed in here).
+        LineField(page=6, origin=(75.14, 620.35), template="{name}", bold=True,
+                  erase_rect=(74.1, 605.5, 300, 626.5)),
     ],
     para_fields=[
         # NOTE: original text uses curly quotes ("Employee.") which the
@@ -262,43 +268,37 @@ EMPLOYMENT = LetterTemplate(
                       Run(", hereinafter referred to as the \"Employee.\"", False),
                   ]),
         ParaField(page=0, origin=(51.8, 575.95), max_width=488.2,
-                  erase_rect=(50.8, 565.8, 540, 614.4),
+                  erase_rect=(50.8, 565.8, 540, 598.0),
                   runs=[
                       Run("The Employee is appointed as ", False),
                       Run("{position}", True),
                       Run(" with effect from ", False),
-                      Run("{start_date}", True),
-                      # {work_location} resolves to one of the two original
-                      # slash-separated options based on work_mode="office"
-                      # or "remote" (see engine.work_location_kwargs) —
-                      # instead of printing both options with a slash.
-                      Run(", {work_location} or such other location as reasonably required by "
-                          "the Company.", False),
+                      Run("{effective_date}", True),
+                      Run(", at the Company's office at Lam Road, Nashik or such other location "
+                          "as reasonably required by the Company.", False),
                   ]),
-        # The "₹" glyph uses a different embedded font (NotoSans) than the
-        # rest of the document because base Times has no rupee-sign glyph,
-        # so it must never fall inside an erase rectangle. Two separate
-        # erase regions are used: one for the tail of line 1 (starting
-        # just after the ₹) and a full-width one for line 2, which also
-        # clears the original (now-redundant) "statutory deductions."
-        # line so our own re-wrapped copy of that phrase isn't duplicated.
-        # left_margin sends any 2nd+ wrapped line back to the paragraph's
-        # true left margin (46.8) instead of continuing under the ₹.
-        ParaField(page=1, origin=(190.34, 129.93), max_width=493.2,
-                  left_margin=46.8,
+        # The bold "₹" glyph uses a different embedded font (NotoSans-Bold)
+        # that base Times can't draw, so it must never fall inside an erase
+        # rectangle: line 1 is erased only to the right of it, and line 2
+        # (which starts at the left margin) is erased full width. Wrapped
+        # lines return to the paragraph's left margin (47.35).
+        ParaField(page=1, origin=(190.9, 128.55), max_width=492.65,
+                  left_margin=47.35,
                   erase_rect=None,
                   erase_rects=[
-                      (190.3, 116.0, 540, 134.0),
-                      (45.8, 134.0, 540, 152.0),
+                      (190.95, 114.5, 545, 132.7),
+                      (46.3, 132.7, 545, 150.5),
                   ],
                   runs=[
-                      Run("{salary_figure}/- (Rupees {salary_words} Thousand Only) per month, subject "
-                          "to applicable statutory deductions.", False),
+                      Run("{salary_figure}/- (Rupees {salary_words} only)", True),
+                      Run(" per month, subject to applicable statutory deductions, on a ", False),
+                      Run("{probation_months}", True),
+                      Run("-month probation convertible to a permanent role.", False),
                   ]),
     ],
 )
-EMPLOYMENT_FIELDS = ["serial", "date", "name", "address", "position", "start_date",
-                     "work_mode", "salary_figure", "salary_words"]
+EMPLOYMENT_FIELDS = ["serial", "date", "name", "address", "position", "effective_date",
+                     "salary_figure", "salary_words", "probation_months"]
 
 ALL_TEMPLATES = {
     "relieving": (RELIEVING, RELIEVING_FIELDS),
